@@ -1,48 +1,60 @@
 package com.company;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("Assignment1 - Complexity and Compute");
 
-// read ID output file
+// read ID input file
         String fileName= "input\\ID.txt";
         File file= new File(fileName);
+
+        String[] myArray=readElement(fileName,0,2,3);
+
         // this gives you a 2-dimensional array of strings
-        List<List<String>> lines = new ArrayList<>();
-        Scanner inputStream;
-        try{
-            inputStream = new Scanner(file);
-            while(inputStream.hasNext()){
-                String line= inputStream.next();
-                String[] values = line.split(",");
-                // this adds the currently parsed line to the 2-dimensional string array
-                lines.add(Arrays.asList(values));
-            }
-            inputStream.close();
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        // try to show original array
-//        int lineNo = 1;
-//        for(List<String> line: lines) {
-//                System.out.println(line);
+//        List<List<String>> lines = new ArrayList<>();
+//        Scanner inputStream;
+//        try{
+//            inputStream = new Scanner(file);
+//            while(inputStream.hasNext()){
+//                String line= inputStream.next();
+//                String[] values = line.split(",");
+//                // this adds the currently parsed line to the 2-dimensional string array
+//                lines.add(Arrays.asList(values));
 //            }
-//            lineNo++;
-        String[] array = new String[lines.size()];
-        for (int i = 0; i < lines.size(); i++) {
-            array[i] = String.valueOf(lines.get(i));
-            System.out.println(array[i]);
+//            inputStream.close();
+//        }catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        // try to show original array
+//        String[] array = new String[lines.size()];
+//        for (int i = 0; i < lines.size(); i++) {
+//            array[i] = String.valueOf(lines.get(i));
+//        }
+//        int n = array.length;
+//        sort(array, n);
         }
-        int n = array.length;
-        sort(array, n);
+
+        public static String[] readElement(String filename, int startPos, int endPos, int n) throws FileNotFoundException {
+            String[] array = new String[n];
+            Scanner inputStream;
+            inputStream = new Scanner(filename);
+            while (inputStream.hasNext()) {
+                int j = 0;
+                for (int i = startPos; i <= endPos; i++) {
+                    array[j] = String.valueOf(inputStream.next());
+                    j++;
+                }
+                inputStream.close();
+            }
+            return array;
         }
+
+        static void writeToRun(String[] array){
+
+        }
+//  Procedure to sort a array string
     static int x = -1;
     static String [] heap = new String[1000];
     static void heapForm(String k)
@@ -94,14 +106,11 @@ public class Main {
         {
             String k;
             k = heap[0];
-            // Taking output of
-            // the minimum element
+            // Taking output of // the minimum element
             System.out.print(k + " ");
-            // Set first element
-            // as a last one
+            // Set first element// as a last one
             heap[0] = heap[x];
-            // Decrement of the
-            // size of the string
+            // Decrement of the // size of the string
             x = x - 1;
             String tmp;
             int index = 0;
@@ -112,20 +121,13 @@ public class Main {
             right1 = left1 + 1;
             while (left1 <= length)
             {
-                // Process of heap sort
-                // If root element is
-                // minimum than its both
-                // of the child then break
+                // Process of heap sort // If root element is // minimum than its both // of the child then break
                 if (heap[index].compareTo(heap[left1]) <= 0 &&
                         heap[index].compareTo(heap[right1]) <= 0)
                 {
                     break;
                 }
-
-                // Otherwise checking that
-                // the child which one is
-                // smaller, swap them with
-                // parent element
+                // Otherwise checking that  // the child which one is // smaller, swap them with// parent element
                 else
                 {
                     // Swapping
@@ -144,12 +146,9 @@ public class Main {
                         index = right1;
                     }
                 }
-                // Changing the left index
-                // and right index
                 left1 = 2 * left1;
                 right1 = left1 + 1;
             }
         }
     }
-
 }
