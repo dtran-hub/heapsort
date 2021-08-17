@@ -1,0 +1,177 @@
+package com.company;
+
+import java.io.*;
+import java.lang.reflect.Array;
+import java.util.*;
+
+
+public class Main {
+    private static final String COMMA_DELIMITER = ","; // Split by comma
+    private static int Maxheap;
+    private static int NumberOfHeap;
+    private static int totalID = 0;
+    public static void main(String[] args) throws IOException {
+        System.out.println("Assignment1 - Complexity and Compute ");
+
+        Scanner keyboard = new Scanner(System.in);
+        System.out.print("Enter Memory Size: ");
+        Maxheap = keyboard.nextInt();
+        System.out.print("Enter Number of Heap: ");
+        NumberOfHeap = keyboard.nextInt();
+
+        //System.out.println("Memory Size: "+ Maxheap + " " + NumberOfHeap + "");
+
+        //Read and Sort ID
+        ParseFile();
+        switch (NumberOfHeap) {
+            case 1: oneHeap();break;
+            case 2: twoHeap();break;
+            default:break;
+        }
+
+    }
+
+    public static void twoHeap() throws IOException {
+
+        BufferedReader brID = null;
+        brID = new BufferedReader(new FileReader("input/ID.txt"));
+        PriorityQueue<String> minHeap1 = new PriorityQueue<String>();
+        PriorityQueue<String> minHeap2 = new PriorityQueue<String>();
+        ArrayList<PriorityQueue> HeapList = new ArrayList<PriorityQueue>();
+        HeapList.add(minHeap1);
+        HeapList.add(minHeap2);
+
+        int heap1Size = Maxheap/2 + 1;
+        int heap2Size = Maxheap - heap1Size;
+        int currentHeap = 0;
+        String lastValue = "";
+        Boolean isNewRun = true;
+        String tmptReadID = "";
+        int runTime = 1;System.out.print("Run1 :");
+
+        while(totalID > 0)
+        {
+            if (currentHeap == 0)
+                Maxheap = heap1Size;
+            else
+                Maxheap = heap2Size;
+
+            if (isNewRun) {
+                for (int i = 0; i < Maxheap; i++) {
+                    if ((tmptReadID = brID.readLine()) != null) {
+                        HeapList.get(currentHeap).add(tmptReadID);
+                        totalID--;
+                    }else{
+                        break;
+                    }
+                }
+                if (minHeap1.isEmpty() == false) {
+                    lastValue = (String) HeapList.get(currentHeap).poll();
+                    System.out.print(" " + lastValue + " ");
+                    isNewRun = false;
+                }
+            }
+
+            if ((tmptReadID = brID.readLine()) == null) break;
+
+            if (lastValue.compareTo(tmptReadID) < 0)
+            {
+                minHeap1.add(tmptReadID);
+                totalID--;
+                lastValue = (String) HeapList.get(currentHeap).poll();
+                System.out.print(" " + lastValue);
+            }else{ //End of run due minValue in heap < lastvalue in run
+                while (HeapList.get(currentHeap).isEmpty() != true)
+                    System.out.print(" " + minHeap1.poll() + " ");
+                runTime++;
+                System.out.println();
+                System.out.print("Run" + runTime +" : " + tmptReadID + " ");
+                isNewRun = true;
+            }
+        }
+        brID.close();
+    }
+
+    public static void oneHeap() throws IOException {
+
+        BufferedReader brID = null;
+        brID = new BufferedReader(new FileReader("input/ID.txt"));
+        PriorityQueue<String> minHeap1 = new PriorityQueue<String>();
+        String lastValue = "";
+        Boolean isNewRun = true;
+        String tmptReadID = "";
+        int runTime = 1;
+        System.out.print("Run1 :");
+        while(totalID > 0)
+        {
+            if (isNewRun) {
+                for (int i = 0; i < Maxheap; i++) {
+                    if ((tmptReadID = brID.readLine()) != null) {
+                        minHeap1.add(tmptReadID);
+                        totalID--;
+                    }else{
+                        break;
+                    }
+                }
+                if (minHeap1.isEmpty() == false) {
+                    lastValue = minHeap1.poll();
+                    System.out.print(" " + lastValue + " ");
+                    isNewRun = false;
+                }
+            }
+
+            if ((tmptReadID = brID.readLine()) == null) break;
+
+            if (lastValue.compareTo(tmptReadID) < 0)
+            {
+                minHeap1.add(tmptReadID);
+                totalID--;
+                lastValue = minHeap1.poll();
+                System.out.print(" " + lastValue);
+            }else{ //End of run due minValue in heap < lastvalue in run
+                while (minHeap1.isEmpty() != true)
+                    System.out.print(" " + minHeap1.poll() + " ");
+                runTime++;
+                System.out.println();
+                System.out.print("Run" + runTime +" : " + tmptReadID + " ");
+                isNewRun = true;
+            }
+        }
+        brID.close();
+    }
+
+    public static void ParseFile()
+    {
+        BufferedReader br = null;
+        try {
+            String line;
+            br = new BufferedReader(new FileReader("input/Inputnum.csv"));
+            PrintWriter writer = new PrintWriter("input/ID.txt", "UTF-8");
+
+            line = br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(COMMA_DELIMITER);
+                String ID = "";
+                for (String e: parts
+                ) {
+                    //System.out.print(e + " ");
+                    ID = ID + e.substring(0,2);
+                }
+                writer.println(ID);
+                totalID++;
+            }
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+            } catch (IOException crunchifyException) {
+                crunchifyException.printStackTrace();
+            }
+        }
+    }
+}
+
